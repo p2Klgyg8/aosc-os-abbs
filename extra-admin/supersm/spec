@@ -1,0 +1,3 @@
+VER=20201129
+SRCS="git::commit=dc126879ee22cc9775d530dede8740143ed29cc6::https://github.com/peeweep/supersm.git"
+CHKSUMS="SKIP"

@@ -1,0 +1,6 @@
+PKGNAME=supersm
+PKGSEC=admin
+PKGDES="A dotfile manager"
+
+BUILDDEP="boost"
+ABTYPE=cmake
