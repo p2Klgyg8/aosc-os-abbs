@@ -1,0 +1,6 @@
+PKGNAME=isync
+PKGSEC=web
+PKGDEP="zlib cyrus-sasl"
+PKGDES="free IMAP and MailDir mailbox synchronizer"
+
+ABTYPE=autotools
