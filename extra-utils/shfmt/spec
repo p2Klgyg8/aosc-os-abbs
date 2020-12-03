@@ -1,0 +1,4 @@
+VER=3.2.1
+SRCTBL="https://github.com/mvdan/sh/archive/v$VER.tar.gz"
+CHKSUM="sha256::a1470285e04b69ee7a2bb3948b64e1da9cabe59658997b50aac7c64465f330bd"
+SUBDIR="sh-$VER/cmd/shfmt"

@@ -1,0 +1,2 @@
+abinfo "installing license file"
+install -Dvm644 ${SRCDIR}/../../LICENSE ${PKGDIR}/usr/share/doc/shfmt/LICENSE

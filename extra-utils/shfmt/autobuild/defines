@@ -1,0 +1,5 @@
+PKGNAME=shfmt
+PKGSEC=devel
+PKGDES="formats shell programs"
+BUILDDEP="go"
+ABTYPE=gomod
