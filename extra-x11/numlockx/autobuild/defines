@@ -1,0 +1,6 @@
+PKGNAME=numlockx
+PKGSEC=x11
+PKGDEP="x11-lib"
+PKGDES="Turns on NumLock after starting X"
+
+ABTYPE=autotools

@@ -1,0 +1,3 @@
+VER=1.2
+SRCS="https://github.com/rg3/numlockx/releases/download/$VER/numlockx-$VER.tar.gz"
+CHKSUMS="sha256::e468eb9121c94c9089dc6a287eeb347e900ce04a14be37da29d7696cbce772e4"
