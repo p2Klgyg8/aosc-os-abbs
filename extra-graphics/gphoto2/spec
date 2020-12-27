@@ -1,3 +1,3 @@
-VER=2.5.23
-SRCTBL="https://svwh.dl.sourceforge.net/project/gphoto/gphoto/${VER}/gphoto2-${VER}.tar.gz"
-CHKSUM="sha256::82100ebcc648586fcdb4aa291c2507d81020b5919094d37bd352fbfbc174fdeb"
+VER=2.5.26
+SRCTBL="https://github.com/gphoto/gphoto2/archive/v${VER}.tar.gz"
+CHKSUM="sha256::2a9d53de098fafcf41a5d385d9faa776e7bd8a8bc3fe62e5c96e4c44951b89a6"
