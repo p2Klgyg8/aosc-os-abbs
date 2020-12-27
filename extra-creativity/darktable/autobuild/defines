@@ -5,7 +5,7 @@ PKGDEP="colord-gtk dbus-glib exiv2 flickcurl graphicsmagick gtk-3 \
         librsvg libsecret libsoup libtiff libwebp iso-codes\
         libxslt openexr openjpeg pugixml sdl sqlite libosmgpsmap \
         libcl lua-5.3"
-BUILDDEP="cmake gnome-doc-utils intltool po4a llvm"
+BUILDDEP="cmake gnome-doc-utils intltool po4a llvm perl-pod-parser"
 PKGDES="Utility to organize and develop raw images"
 
 CMAKE_AFTER="-DBINARY_PACKAGE_BUILD=1 \
