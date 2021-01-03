@@ -1,5 +1,5 @@
-VER=20200901
+VER=20201218
 GITSRC="https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git"
-GITCO="d5f9eea5a251d43412b07f5295d03e97b89ac4a5"
+GITCO="646f159690e2e00fdb829faeed35e23217ac944c"
 SUBDIR=.
 CHKSUMS="SKIP"
