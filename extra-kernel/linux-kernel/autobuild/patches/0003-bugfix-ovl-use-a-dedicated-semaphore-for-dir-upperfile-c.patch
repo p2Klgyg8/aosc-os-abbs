@@ -1,0 +1,82 @@
+From f413a8061c5e3a1f32e5e6516e2eacecdb7ae288 Mon Sep 17 00:00:00 2001
+From: Icenowy Zheng <icenowy@aosc.io>
+Date: Sat, 2 Jan 2021 04:05:18 +0800
+Subject: [PATCH v3] ovl: use a dedicated semaphore for dir upperfile caching
+
+The function ovl_dir_real_file() currently uses the semaphore of the
+inode to synchronize write to the upperfile cache field.
+
+However, this function will get called by ovl_ioctl_set_flags(), which
+utilizes the inode semaphore too. In this case ovl_dir_real_file() will
+try to claim a lock that is owned by a function in its call stack, which
+won't get released before ovl_dir_real_file() returns.
+
+Define a dedicated semaphore for the upperfile cache, so that the
+deadlock won't happen.
+
+Fixes: 61536bed2149 ("ovl: support [S|G]ETFLAGS and FS[S|G]ETXATTR ioctls for directories")
+Cc: stable@vger.kernel.org # v5.10
+Signed-off-by: Icenowy Zheng <icenowy@aosc.io>
+---
+Changes in v2:
+- Fixed missing replacement in error handling path.
+Changes in v3:
+- Use mutex instead of semaphore.
+
+ fs/overlayfs/readdir.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/fs/overlayfs/readdir.c b/fs/overlayfs/readdir.c
+index 01620ebae1bd..3980f9982f34 100644
+--- a/fs/overlayfs/readdir.c
++++ b/fs/overlayfs/readdir.c
+@@ -56,6 +56,7 @@ struct ovl_dir_file {
+ 	struct list_head *cursor;
+ 	struct file *realfile;
+ 	struct file *upperfile;
++	struct mutex upperfile_mutex;
+ };
+ 
+ static struct ovl_cache_entry *ovl_cache_entry_from_node(struct rb_node *n)
+@@ -874,8 +875,6 @@ struct file *ovl_dir_real_file(const struct file *file, bool want_upper)
+ 	 * Need to check if we started out being a lower dir, but got copied up
+ 	 */
+ 	if (!od->is_upper) {
+-		struct inode *inode = file_inode(file);
+-
+ 		realfile = READ_ONCE(od->upperfile);
+ 		if (!realfile) {
+ 			struct path upperpath;
+@@ -883,10 +882,10 @@ struct file *ovl_dir_real_file(const struct file *file, bool want_upper)
+ 			ovl_path_upper(dentry, &upperpath);
+ 			realfile = ovl_dir_open_realfile(file, &upperpath);
+ 
+-			inode_lock(inode);
++			mutex_lock(&od->upperfile_mutex);
+ 			if (!od->upperfile) {
+ 				if (IS_ERR(realfile)) {
+-					inode_unlock(inode);
++					mutex_unlock(&od->upperfile_mutex);
+ 					return realfile;
+ 				}
+ 				smp_store_release(&od->upperfile, realfile);
+@@ -896,7 +895,7 @@ struct file *ovl_dir_real_file(const struct file *file, bool want_upper)
+ 					fput(realfile);
+ 				realfile = od->upperfile;
+ 			}
+-			inode_unlock(inode);
++			mutex_unlock(&od->upperfile_mutex);
+ 		}
+ 	}
+ 
+@@ -959,6 +958,7 @@ static int ovl_dir_open(struct inode *inode, struct file *file)
+ 	od->realfile = realfile;
+ 	od->is_real = ovl_dir_is_real(file->f_path.dentry);
+ 	od->is_upper = OVL_TYPE_UPPER(type);
++	mutex_init(&od->upperfile_mutex);
+ 	file->private_data = od;
+ 
+ 	return 0;
+-- 
+2.28.0
+
