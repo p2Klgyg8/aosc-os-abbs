@@ -1,0 +1,5 @@
+PKGNAME=cgproxy
+PKGSEC=net
+PKGDEP="glibc libbpf iptables iproute2 procps which"
+BUILDDEP="nlohmann-json"
+PKGDES="A program will transparent proxy anything running in specific cgroup"
